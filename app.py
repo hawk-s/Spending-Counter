@@ -27,7 +27,7 @@ def index():
     expenses = Expense.query.all()
     return render_template('index.html', expenses=expenses)
 
-@app.route('/add_expense', methods=['POST'])
+@app.route('/add_expense', methods=['GET','POST'])
 def add_expense():
     flatmate_name = request.form.get('flatmate_name')
     item = request.form.get('item')
