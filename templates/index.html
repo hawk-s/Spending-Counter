@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense List</title>
+</head>
+<body>
+    <h1>Expense List</h1>
+    <a href="/add_expense">Add Expense</a> <!-- This is the link to Add Expense -->
+    <table>
+        <tr>
+            <th>Flatmate Name</th>
+            <th>Item</th>
+            <th>Cost</th>
+        </tr>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense.flatmate_name }}</td>
+            <td>{{ expense.item }}</td>
+            <td>{{ expense.cost }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
