@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Owed Amounts</title>
+    <!-- Add the viewport meta element here -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>Owed Amounts</h1>
+    <table>
+        <tr>
+            <th>Flatmate Name</th>
+            <th>Owed Amount</th>
+        </tr>
+        {% for name, amount in owed_amounts.items() %}
+        <tr>
+            <td>{{ name }}</td>
+            <td>{{ amount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
