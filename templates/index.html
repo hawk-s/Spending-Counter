@@ -13,12 +13,14 @@
             <th>Flatmate Name</th>
             <th>Item</th>
             <th>Cost</th>
+            <th>Owed Amount</th>
         </tr>
         {% for expense in expenses %}
         <tr>
             <td>{{ expense.flatmate_name }}</td>
             <td>{{ expense.item }}</td>
             <td>{{ expense.cost }}</td>
+            <td>{{ owed_amounts[expense.flatmate_name] }}</td>
         </tr>
         {% endfor %}
     </table>
