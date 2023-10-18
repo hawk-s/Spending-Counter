@@ -43,10 +43,18 @@ def calculate_owed_amounts():
     return owed_amounts
 
 # Routes and Templates
+'''
 @app.route('/')
 def index():
     expenses = Expense.query.all()
     return render_template('index.html', expenses=expenses)
+'''
+
+@app.route('/')
+def index():
+    flatmates = Flatmate.query.all()
+    return render_template('index.html', flatmates=flatmates)
+
 
 @app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
