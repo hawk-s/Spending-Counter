@@ -16,7 +16,7 @@
         </tr>
         {% for expense in expenses %}
         <tr>
-            <td>{{ expense.flatmate_name }}</td>
+            <td>{{ expense.flatmate.name }}</td>
             <td>{{ expense.item }}</td>
             <td>{{ expense.cost }}</td>
         </tr>
