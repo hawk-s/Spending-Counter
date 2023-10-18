@@ -1,15 +1,16 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 # Create a Flask Application
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///expenses.db'  # Use SQLite for simplicity
+app.secret_key = 'your_secret_key'  # Change this to a secure secret key
 db = SQLAlchemy(app)
 
 # Database Models
 class Flatmate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), nullable=False, unique=True)  # Ensure flatmate names are unique
     expenses = db.relationship('Expense', backref='flatmate', lazy=True)
 
 class Expense(db.Model):
@@ -17,6 +18,10 @@ class Expense(db.Model):
     flatmate_id = db.Column(db.Integer, db.ForeignKey('flatmate.id'), nullable=False)
     item = db.Column(db.String(100), nullable=False)
     cost = db.Column(db.Float, nullable=False)
+
+# Function to find a flatmate by name
+def find_flatmate_by_name(name):
+    return Flatmate.query.filter_by(name=name).first()
 
 # Calculate Owed Amounts
 def calculate_owed_amounts():
@@ -44,16 +49,24 @@ def add_expense():
     if request.method == 'POST':
         flatmate_name = request.form.get('flatmate_name')
         item = request.form.get('item')
-        cost = float(request.form.get('cost'))
+        cost = request.form.get('cost')
 
-        # Get flatmate by name (you may want to implement a lookup function)
-        flatmate = Flatmate.query.filter_by(name=flatmate_name).first()
+        # Input validation for cost
+        try:
+            cost = float(cost)
+        except ValueError:
+            flash('Cost must be a valid number.', 'error')
+            return redirect(url_for('add_expense'))
+
+        flatmate = find_flatmate_by_name(flatmate_name)
 
         if flatmate:
             expense = Expense(flatmate_id=flatmate.id, item=item, cost=cost)
             db.session.add(expense)
             db.session.commit()
             return redirect(url_for('index'))
+        else:
+            flash('Flatmate not found. Please enter a valid flatmate name.', 'error')
 
     flatmates = Flatmate.query.all()
     return render_template('add_expense.html', flatmates=flatmates)
