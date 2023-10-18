@@ -7,6 +7,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new_expenses.db'  # Use SQLit
 app.secret_key = 'your_secret_key'  # Change this to a secure secret key
 db = SQLAlchemy(app)
 
+with app.app_context():
+    db.create_all()
+
+
 # Database Models
 class Flatmate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
