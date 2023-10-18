@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # Create a Flask Application
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///expenses.db'  # Use SQLite for simplicity
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new_expenses.db'  # Use SQLite for simplicity
 app.secret_key = 'your_secret_key'  # Change this to a secure secret key
 db = SQLAlchemy(app)
 
