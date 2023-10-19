@@ -1,17 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Expense List</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        a {
+            text-decoration: none;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Expense List</h1>
-    <a href="/add_expense">Add Expense</a> <!-- This is the link to Add Expense -->
+    <a href="/add_expense">Add Expense</a>
+
+    <label for="currency-select">Select Currency: </label>
+    <select id="currency-select">
+        <option value="CZK">Czech Crown (CZK)</option>
+        <option value="USD">US Dollar (USD)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="GBP">British Pound (GBP)</option>
+    </select>
     
-    <!-- First table without Owed/Should Get column -->
     <table>
         <tr>
-            <th>Flatmate Name</th>
+            <th>Name</th>
             <th>Item</th>
             <th>Cost</th>
         </tr>
@@ -19,24 +67,85 @@
         <tr>
             <td>{{ expense.flatmate_name }}</td>
             <td>{{ expense.item }}</td>
-            <td>{{ expense.cost }}</td>
+            <td class="expense-cost" data-czk-value="{{ expense.cost }}">{{ expense.cost }}</td>
         </tr>
         {% endfor %}
     </table>
 
-    <!-- Second table with names and Owed/Should Get column -->
     <h2>Owed/Should Get</h2>
     <table>
         <tr>
-            <th>Flatmate Name</th>
+            <th>Name</th>
             <th>Owes/Should Get</th>
         </tr>
         {% for flatmate_name, owed_amount in owed_amounts.items() %}
         <tr>
             <td>{{ flatmate_name }}</td>
-            <td>{{ owed_amount }}</td>
+            <td class="owed-amount" data-czk-value="{{ owed_amount }}">{{ owed_amount }}</td>
         </tr>
         {% endfor %}
     </table>
+
+    <script>
+        // Define exchange rates
+        let exchangeRates = {
+            CZK: 1,
+            USD: null,
+            EUR: null,
+            GBP: null,
+        };
+
+        // Function to update currency
+        function updateCurrency() {
+            const selectedCurrency = document.getElementById('currency-select').value;
+            const expenseCosts = document.querySelectorAll('.expense-cost');
+            const owedAmounts = document.querySelectorAll('.owed-amount');
+
+            expenseCosts.forEach((element) => {
+                const czkValue = parseFloat(element.getAttribute('data-czk-value'));
+                if (exchangeRates[selectedCurrency] !== null) {
+                    element.textContent = (czkValue / exchangeRates[selectedCurrency]).toFixed(2) + ' ' + selectedCurrency;
+                } else {
+                    element.textContent = 'N/A';
+                }
+            });
+
+            owedAmounts.forEach((element) => {
+                const czkValue = parseFloat(element.getAttribute('data-czk-value'));
+                if (exchangeRates[selectedCurrency] !== null) {
+                    element.textContent = (czkValue / exchangeRates[selectedCurrency]).toFixed(2) + ' ' + selectedCurrency;
+                } else {
+                    element.textContent = 'N/A';
+                }
+            });
+        }
+
+        // Fetch exchange rates from European Central Bank API
+        async function fetchExchangeRates() {
+            const selectedCurrency = document.getElementById('currency-select').value;
+            const apiURL = `https://data-api.ecb.europa.eu/service/data/EXR/D.CZK.${selectedCurrency}.SP00.A?format=jsondata`;
+
+            try {
+                const response = await fetch(apiURL);
+                const data = await response.json();
+                if (data.dataSets && data.dataSets[0] && data.dataSets[0].observations) {
+                    exchangeRates.USD = data.dataSets[0].observations[0][0][0];
+                    exchangeRates.EUR = data.dataSets[0].observations[0][1][0];
+                    exchangeRates.GBP = data.dataSets[0].observations[0][2][0];
+                    updateCurrency();
+                } else {
+                    console.error('Error fetching exchange rates:', data);
+                }
+            } catch (error) {
+                console.error('Error fetching exchange rates:', error);
+            }
+        }
+
+        // Add event listener to the currency select element
+        document.getElementById('currency-select').addEventListener('change', updateCurrency);
+
+        // Initial currency update
+        fetchExchangeRates();
+    </script>
 </body>
 </html>
