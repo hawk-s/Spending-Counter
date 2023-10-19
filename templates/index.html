@@ -120,6 +120,8 @@
             });
         }
 
+                // ... (previous code)
+
         // Fetch exchange rates from European Central Bank API
         async function fetchExchangeRates() {
             const selectedCurrency = document.getElementById('currency-select').value;
@@ -127,6 +129,11 @@
 
             try {
                 const response = await fetch(apiURL);
+                if (!response.ok) {
+                    console.error('Error fetching exchange rates - Response not OK:', response.status, response.statusText);
+                    return;
+                }
+
                 const data = await response.json();
                 if (data.dataSets && data.dataSets[0] && data.dataSets[0].observations) {
                     exchangeRates.USD = data.dataSets[0].observations[0][0][0];
@@ -134,12 +141,17 @@
                     exchangeRates.GBP = data.dataSets[0].observations[0][2][0];
                     updateCurrency();
                 } else {
-                    console.error('Error fetching exchange rates:', data);
+                    console.error('Error fetching exchange rates - Data format is not as expected:', data);
                 }
             } catch (error) {
-                console.error('Error fetching exchange rates:', error);
+                console.error('Error fetching exchange rates - An error occurred:', error);
             }
         }
+
+        // ... (rest of the code)
+
+
+        
 
         // Add event listener to the currency select element
         document.getElementById('currency-select').addEventListener('change', updateCurrency);
