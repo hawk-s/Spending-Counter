@@ -2,25 +2,39 @@
 <html lang="en">
 <head>
     <title>Expense List</title>
-    <!-- Add the viewport meta element here -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <h1>Expense List</h1>
     <a href="/add_expense">Add Expense</a> <!-- This is the link to Add Expense -->
+    
+    <!-- First table without Owed/Should Get column -->
     <table>
         <tr>
             <th>Flatmate Name</th>
             <th>Item</th>
             <th>Cost</th>
-            <th>Owed Amount</th>
         </tr>
         {% for expense in expenses %}
         <tr>
             <td>{{ expense.flatmate_name }}</td>
             <td>{{ expense.item }}</td>
             <td>{{ expense.cost }}</td>
-            <td>{{ owed_amounts[expense.flatmate_name] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Second table with names and Owed/Should Get column -->
+    <h2>Owed/Should Get</h2>
+    <table>
+        <tr>
+            <th>Flatmate Name</th>
+            <th>Owes/Should Get</th>
+        </tr>
+        {% for flatmate_name, owed_amount in owed_amounts.items() %}
+        <tr>
+            <td>{{ flatmate_name }}</td>
+            <td>{{ owed_amount }}</td>
         </tr>
         {% endfor %}
     </table>
