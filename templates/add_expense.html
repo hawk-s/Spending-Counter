@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Add Expense</title>
-    <!-- Add the viewport meta element here -->
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        form {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Add Expense</h1>
     <form method="POST" action="/add_expense">
-        <label for="flatmate_name">Flatmate Name:</label>
-        <input type="text" id="flatmate_name" name="flatmate_name" required><br>
-
+        <label for="flatmate_name">Name:</label>
+        <input type="text" id="flatmate_name" name="flatmate_name" required>
+        
         <label for="item">Item:</label>
-        <input type="text" id="item" name="item" required><br>
-
+        <input type="text" id="item" name="item" required>
+        
         <label for="cost">Cost:</label>
-        <input type="number" id="cost" name="cost" step="0.01" required><br>
-
+        <input type="number" id="cost" name="cost" step="0.01" required>
+        
         <button type="submit">Submit Expense</button>
     </form>
 </body>
