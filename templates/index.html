@@ -85,79 +85,40 @@
         </tr>
         {% endfor %}
     </table>
-
     <script>
-        // Define exchange rates
-        let exchangeRates = {
-            CZK: 1,
-            USD: null,
-            EUR: null,
-            GBP: null,
+        var exchangeRates = {
+            'CZK': 1,
+            'USD': null,
+            'EUR': {{ exchangeRates['EUR'] }}, // Update with the actual exchange rate
+            'GBP': null
         };
-
-        // Function to update currency
-        function updateCurrency() {
-            const selectedCurrency = document.getElementById('currency-select').value;
-            const expenseCosts = document.querySelectorAll('.expense-cost');
-            const owedAmounts = document.querySelectorAll('.owed-amount');
-
-            expenseCosts.forEach((element) => {
-                const czkValue = parseFloat(element.getAttribute('data-czk-value'));
-                if (exchangeRates[selectedCurrency] !== null) {
-                    element.textContent = (czkValue / exchangeRates[selectedCurrency]).toFixed(2) + ' ' + selectedCurrency;
-                } else {
-                    element.textContent = 'N/A';
-                }
-            });
-
-            owedAmounts.forEach((element) => {
-                const czkValue = parseFloat(element.getAttribute('data-czk-value'));
-                if (exchangeRates[selectedCurrency] !== null) {
-                    element.textContent = (czkValue / exchangeRates[selectedCurrency]).toFixed(2) + ' ' + selectedCurrency;
-                } else {
-                    element.textContent = 'N/A';
-                }
-            });
-        }
-
-                // ... (previous code)
-
-        // Fetch exchange rates from European Central Bank API
-        async function fetchExchangeRates() {
-            const selectedCurrency = document.getElementById('currency-select').value;
-            const apiURL = `https://data-api.ecb.europa.eu/service/data/EXR/D.CZK.${selectedCurrency}.SP00.A?format=jsondata`;
-
-            try {
-                const response = await fetch(apiURL);
-                if (!response.ok) {
-                    console.error('Error fetching exchange rates - Response not OK:', response.status, response.statusText);
-                    return;
-                }
-
-                const data = await response.json();
-                if (data.dataSets && data.dataSets[0] && data.dataSets[0].observations) {
-                    exchangeRates.USD = data.dataSets[0].observations[0][0][0];
-                    exchangeRates.EUR = data.dataSets[0].observations[0][1][0];
-                    exchangeRates.GBP = data.dataSets[0].observations[0][2][0];
-                    updateCurrency();
-                } else {
-                    console.error('Error fetching exchange rates - Data format is not as expected:', data);
-                }
-            } catch (error) {
-                console.error('Error fetching exchange rates - An error occurred:', error);
-            }
-        }
-
-        // ... (rest of the code)
-
-
         
-
-        // Add event listener to the currency select element
-        document.getElementById('currency-select').addEventListener('change', updateCurrency);
-
-        // Initial currency update
-        fetchExchangeRates();
+        // Function to update displayed costs and owed amounts based on the selected currency
+        function updateCurrencyConversion() {
+            const selectedCurrency = document.getElementById("currency-select").value;
+        
+            // Get all elements with the class "expense-cost" (costs) and "owed-amount" (owed amounts)
+            const expenseElements = document.querySelectorAll(".expense-cost");
+            const owedAmountElements = document.querySelectorAll(".owed-amount");
+        
+            expenseElements.forEach(function (element) {
+                const costInCZK = parseFloat(element.getAttribute("data-czk-value"));
+                const convertedCost = costInCZK / exchangeRates['CZK'] * exchangeRates[selectedCurrency];
+                element.textContent = (selectedCurrency === 'EUR') ? convertedCost.toFixed(2) : costInCZK.toFixed(2);
+            });
+        
+            owedAmountElements.forEach(function (element) {
+                const owedAmountInCZK = parseFloat(element.getAttribute("data-czk-value"));
+                const convertedOwedAmount = owedAmountInCZK / exchangeRates['CZK'] * exchangeRates[selectedCurrency];
+                element.textContent = (selectedCurrency === 'EUR') ? convertedOwedAmount.toFixed(2) : owedAmountInCZK.toFixed(2);
+            });
+        }
+        
+        // Attach an event listener to the currency select dropdown
+        document.getElementById("currency-select").addEventListener("change", updateCurrencyConversion);
+        
+        // Initial conversion when the page loads
+        updateCurrencyConversion();
     </script>
 </body>
 </html>

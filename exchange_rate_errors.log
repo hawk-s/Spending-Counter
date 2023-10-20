@@ -6,3 +6,41 @@
 2023-10-19 23:41:21,440 - exchange_rate_logger - ERROR - Error: 'observations'
 2023-10-19 23:51:03,802 - exchange_rate_logger - ERROR - Error: 'observations'
 2023-10-19 23:51:06,645 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-19 23:52:36,720 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 06:57:26,138 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 06:57:41,378 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 07:18:14,570 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 07:18:18,542 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 07:27:40,388 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 07:27:42,559 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 07:50:23,312 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 07:50:27,405 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 07:51:44,627 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 07:59:39,391 - exchange_rate_logger - ERROR - Error: 0
+2023-10-20 08:00:47,148 - exchange_rate_logger - ERROR - Error: 0
+2023-10-20 08:00:51,144 - exchange_rate_logger - ERROR - Error: 0
+2023-10-20 08:03:35,644 - exchange_rate_logger - ERROR - Error: 0
+2023-10-20 08:03:37,779 - exchange_rate_logger - ERROR - Error: 0
+2023-10-20 08:04:42,300 - exchange_rate_logger - ERROR - Error: 0
+2023-10-20 08:04:46,085 - exchange_rate_logger - ERROR - Error: 0
+2023-10-20 08:09:13,378 - exchange_rate_logger - ERROR - Error: -1
+2023-10-20 08:10:21,450 - exchange_rate_logger - ERROR - Error: -1
+2023-10-20 08:10:24,836 - exchange_rate_logger - ERROR - Error: -1
+2023-10-20 08:15:06,888 - exchange_rate_logger - ERROR - Error: -1
+2023-10-20 08:15:09,473 - exchange_rate_logger - ERROR - Error: -1
+2023-10-20 08:20:41,906 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 08:20:45,387 - exchange_rate_logger - ERROR - Error: 'observations'
+2023-10-20 08:27:33,609 - exchange_rate_logger - ERROR - Error: Exchange rate data not found in the API response.
+2023-10-20 08:27:36,611 - exchange_rate_logger - ERROR - Error: Exchange rate data not found in the API response.
+2023-10-20 08:43:28,785 - exchange_rate_logger - ERROR - Error: Exchange rate data not found in the API response.
+2023-10-20 08:43:31,302 - exchange_rate_logger - ERROR - Error: Exchange rate data not found in the API response.
+2023-10-20 08:48:00,586 - exchange_rate_logger - ERROR - Error: Exchange rate data not found in the API response.
+2023-10-20 08:48:06,554 - exchange_rate_logger - ERROR - Error: Exchange rate data not found in the API response.
+2023-10-20 08:50:30,328 - exchange_rate_logger - ERROR - Error: Exchange rate data not found in the API response.
+2023-10-20 08:50:33,472 - exchange_rate_logger - ERROR - Error: Exchange rate data not found in the API response.
+2023-10-20 08:53:05,461 - exchange_rate_logger - ERROR - Error: Data structure not found in the API response.
+2023-10-20 08:53:08,261 - exchange_rate_logger - ERROR - Error: Data structure not found in the API response.
+2023-10-20 08:58:14,997 - exchange_rate_logger - ERROR - Error: unsupported operand type(s) for /: 'int' and 'dict'
+2023-10-20 08:58:18,873 - exchange_rate_logger - ERROR - Error: unsupported operand type(s) for /: 'int' and 'dict'
+2023-10-20 22:05:38,317 - exchange_rate_logger - ERROR - Error: unsupported operand type(s) for /: 'int' and 'dict'
+2023-10-20 22:05:39,998 - exchange_rate_logger - ERROR - Error: unsupported operand type(s) for /: 'int' and 'dict'

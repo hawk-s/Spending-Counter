@@ -27,30 +27,27 @@ exchangeRates = {
     'GBP': None
 }
 
-# Initialize a logger to record errors
-logger = logging.getLogger('exchange_rate_logger')
-logger.setLevel(logging.ERROR)
-handler = logging.FileHandler('exchange_rate_errors.log')  # Create a log file
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
-# Fetch exchange rates from the European Central Bank API
 def fetch_exchange_rates():
     try:
-        response = requests.get('https://data-api.ecb.europa.eu/service/data/EXR/D.CZK.USD+EUR+GBP.SP00.A?format=jsondata')
-        response.raise_for_status()  # Raise an error for HTTP status codes other than 2xx
+        api_url = "https://data-api.ecb.europa.eu/service/data/EXR/D.CZK.EUR.SP00.A?lastNObservations=1&format=jsondata"
+        response = requests.get(api_url)
         data = response.json()
-        if 'dataSets' in data and data['dataSets'][0]['observations']:
-            exchangeRates['USD'] = data['dataSets'][0]['observations'][0][0][0]
-            exchangeRates['EUR'] = data['dataSets'][0]['observations'][0][1][0]
-            exchangeRates['GBP'] = data['dataSets'][0]['observations'][0][2][0]
-        else:
-            logger.error('Error: Unexpected response format - dataSets and observations not found in API response.')
-    except requests.exceptions.RequestException as e:
-        logger.error(f'Error fetching exchange rates: {str(e)}')
+        
+        # Extract the exchange rate value from the JSON data
+        exchange_rate = data['dataSets'][0]['series']['0:0:0:0:0']['observations']['0'][0]
+        
+        # Update the exchangeRates dictionary
+        exchangeRates['EUR'] = 1/exchange_rate
+
     except Exception as e:
-        logger.error(f'Error: {str(e)}')
+        print("Error fetching exchange rates:", str(e))
+
+def convert_czk_to_eur(amount_in_czk):
+    if exchangeRates['EUR'] is not None:
+        return amount_in_czk / exchangeRates['EUR']
+    else:
+        return None  # Handle the case where the exchange rate is not available
+
 
 # Calculate total expenses
 def calculate_total_expenses():
@@ -94,7 +91,7 @@ def index():
     total_expenses = calculate_total_expenses()
     owed_amounts = calculate_owed_amounts(total_expenses)  # Calculate owed amounts
     expenses = Expense.query.all()
-    return render_template('index.html', expenses=expenses, owed_amounts=owed_amounts)
+    return render_template('index.html', expenses=expenses, owed_amounts=owed_amounts, exchangeRates=exchangeRates)
 
 @app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
