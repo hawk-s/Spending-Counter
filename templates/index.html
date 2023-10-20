@@ -1,16 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Expense List</title>
-    <!-- Add the viewport meta element here -->
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        a {
+            text-decoration: none;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Expense List</h1>
-    <a href="/add_expense">Add Expense</a> <!-- This is the link to Add Expense -->
+    <a href="/add_expense">Add Expense</a>
+
+    <label for="currency-select">Select Currency: </label>
+    <select id="currency-select">
+        <option value="CZK">Czech Crown (CZK)</option>
+        <option value="USD">US Dollar (USD)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="GBP">British Pound (GBP)</option>
+    </select>
+    
     <table>
         <tr>
-            <th>Flatmate Name</th>
+            <th>Name</th>
             <th>Item</th>
             <th>Cost</th>
         </tr>
@@ -18,9 +67,58 @@
         <tr>
             <td>{{ expense.flatmate_name }}</td>
             <td>{{ expense.item }}</td>
-            <td>{{ expense.cost }}</td>
+            <td class="expense-cost" data-czk-value="{{ expense.cost }}">{{ expense.cost }}</td>
         </tr>
         {% endfor %}
     </table>
+
+    <h2>Owed/Should Get</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Owes/Should Get</th>
+        </tr>
+        {% for flatmate_name, owed_amount in owed_amounts.items() %}
+        <tr>
+            <td>{{ flatmate_name }}</td>
+            <td class="owed-amount" data-czk-value="{{ owed_amount }}">{{ owed_amount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <script>
+        var exchangeRates = {
+            'CZK': 1,
+            'USD': null,
+            'EUR': {{ exchangeRates['EUR'] }}, // Update with the actual exchange rate
+            'GBP': null
+        };
+        
+        // Function to update displayed costs and owed amounts based on the selected currency
+        function updateCurrencyConversion() {
+            const selectedCurrency = document.getElementById("currency-select").value;
+        
+            // Get all elements with the class "expense-cost" (costs) and "owed-amount" (owed amounts)
+            const expenseElements = document.querySelectorAll(".expense-cost");
+            const owedAmountElements = document.querySelectorAll(".owed-amount");
+        
+            expenseElements.forEach(function (element) {
+                const costInCZK = parseFloat(element.getAttribute("data-czk-value"));
+                const convertedCost = costInCZK / exchangeRates['CZK'] * exchangeRates[selectedCurrency];
+                element.textContent = (selectedCurrency === 'EUR') ? convertedCost.toFixed(2) : costInCZK.toFixed(2);
+            });
+        
+            owedAmountElements.forEach(function (element) {
+                const owedAmountInCZK = parseFloat(element.getAttribute("data-czk-value"));
+                const convertedOwedAmount = owedAmountInCZK / exchangeRates['CZK'] * exchangeRates[selectedCurrency];
+                element.textContent = (selectedCurrency === 'EUR') ? convertedOwedAmount.toFixed(2) : owedAmountInCZK.toFixed(2);
+            });
+        }
+        
+        // Attach an event listener to the currency select dropdown
+        document.getElementById("currency-select").addEventListener("change", updateCurrencyConversion);
+        
+        // Initial conversion when the page loads
+        updateCurrencyConversion();
+    </script>
 </body>
 </html>
