@@ -42,6 +42,8 @@ def fetch_exchange_rates():
     except Exception as e:
         print("Error fetching exchange rates:", str(e))
 
+fetch_exchange_rates()
+
 def convert_czk_to_eur(amount_in_czk):
     if exchangeRates['EUR'] is not None:
         return amount_in_czk / exchangeRates['EUR']
@@ -111,6 +113,5 @@ def add_expense():
 '''
 if __name__ == '__main__':
     # Fetch exchange rates when the app starts
-    fetch_exchange_rates()
     app.run(debug=True)
 '''
