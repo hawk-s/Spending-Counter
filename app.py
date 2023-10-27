@@ -108,7 +108,9 @@ def add_expense():
     return render_template('add_expense.html')  # Display the form for adding expenses
 
 # Run the application
+'''
 if __name__ == '__main__':
     # Fetch exchange rates when the app starts
     fetch_exchange_rates()
     app.run(debug=True)
+'''
