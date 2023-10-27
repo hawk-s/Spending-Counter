@@ -87,10 +87,10 @@
     </table>
     <script>
         var exchangeRates = {
-            'CZK': 1,
-            'USD': null,
+            'CZK': {{ exchangeRates['CZK'] }},
+            'USD': {{ exchangeRates['USD'] }},
             'EUR': {{ exchangeRates['EUR'] }}, // Update with the actual exchange rate
-            'GBP': null
+            'GBP': {{ exchangeRates['GBP'] }}
         };
         
         // Function to update displayed costs and owed amounts based on the selected currency
